@@ -1,7 +1,11 @@
 {
-    "name": "unihelp-project",
+    "name": "unihelp-monorepo",
     "private": true,
+    "workspaces": [
+        "ai-assistant-front",
+        "ai-assistant-back"
+    ],
     "scripts": {
-        "build": "cd ai-assistant-front && npm install && npm run build"
+        "build": "npm run build --workspace=ai-assistant-front"
     }
 }
