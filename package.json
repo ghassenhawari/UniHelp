@@ -1,6 +1,5 @@
 {
-    "name": "unihelp-monorepo",
-    "version": "1.0.0",
+    "name": "unihelp-project",
     "private": true,
     "scripts": {
         "build": "cd ai-assistant-front && npm install && npm run build"
