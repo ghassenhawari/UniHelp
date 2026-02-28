@@ -1,0 +1,89 @@
+version: '3.9'
+
+services:
+  # ── UniHelp NestJS API ─────────────────────────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: unihelp_api
+    ports:
+      - '3001:3001'
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      OLLAMA_BASE_URL: http://ollama:11434
+      OLLAMA_MODEL: llama3.2
+      CHROMA_HOST: chromadb
+      CHROMA_PORT: 8000
+      CHROMA_COLLECTION: unihelp_docs
+      UPLOAD_DIR: /app/uploads
+    volumes:
+      - ./uploads:/app/uploads
+    depends_on:
+      - chromadb
+      - ollama
+    restart: unless-stopped
+    networks:
+      - unihelp_net
+
+  # ── PostgreSQL (Auth & Users) ──────────────────────────────────
+  postgres:
+    image: postgres:15-alpine
+    container_name: unihelp_db
+    ports:
+      - '5433:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: unihelp
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - unihelp_net
+
+  # ── ChromaDB (vector store) ────────────────────────────────────
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: unihelp_chroma
+    ports:
+      - '8000:8000'
+    volumes:
+      - chroma_data:/chroma/chroma
+    environment:
+      IS_PERSISTENT: 'TRUE'
+      ANONYMIZED_TELEMETRY: 'FALSE'
+    restart: unless-stopped
+    networks:
+      - unihelp_net
+
+  # ── Ollama (local LLM) ─────────────────────────────────────────
+  ollama:
+    image: ollama/ollama:latest
+    container_name: unihelp_ollama
+    ports:
+      - '11434:11434'
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+    networks:
+      - unihelp_net
+    # Pour GPU NVIDIA, décommenter:
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+
+volumes:
+  postgres_data:
+  chroma_data:
+  ollama_data:
+
+
+networks:
+  unihelp_net:
+    driver: bridge

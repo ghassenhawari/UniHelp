@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-900 font-sans antialiased;
+  }
+
+  ::selection {
+    @apply bg-brand-100 text-brand-900;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-xl;
+  }
+
+  .btn-primary {
+    @apply px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg font-medium transition-all transform active:scale-95 shadow-md hover:shadow-lg flex items-center justify-center gap-2;
+  }
+
+  .btn-secondary {
+    @apply px-4 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-lg font-medium transition-all transform active:scale-95 shadow-sm flex items-center justify-center gap-2;
+  }
+
+  .nav-link {
+    @apply flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-slate-600 hover:bg-brand-50 hover:text-brand-600;
+  }
+
+  .nav-link.active {
+    @apply bg-brand-600 text-white shadow-lg shadow-brand-200 hover:bg-brand-700;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-200 rounded-full hover:bg-slate-300 transition-colors;
+}
